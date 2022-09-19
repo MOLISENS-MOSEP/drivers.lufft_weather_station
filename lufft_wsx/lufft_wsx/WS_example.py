@@ -27,9 +27,9 @@ def main():
     single_request = 113                        # single channel request
     # channels = [113, 4630, 113, 113, 4630, 113] # channels to request
 
-    with WS_UMB(device='COM8', baudrate=19200) as umb:
-        query_one_channel(umb, single_request, receiver_id=6)
-        # query_multiple_channels(umb, channels)
+    with WS_UMB(device='/dev/ttyUSB2', baudrate=19200) as umb:
+        #query_one_channel(umb, single_request, receiver_id=6)
+        query_multiple_channels(umb, [113], receiver_id=6)
         # query_multiple_channels_one_call(umb, channels)
 
 if __name__ == "__main__":

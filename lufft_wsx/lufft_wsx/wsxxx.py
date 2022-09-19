@@ -25,14 +25,16 @@ class WSXXXNode(Node):
         super().__init__("wsxxx")
 
         self.declare_parameter("publish_frequency", 1.0)
-        self.declare_parameter("umb_channels", [620, 625, 700, 780, 820, 825])
-        self.declare_parameter("device", "COM3")
+        self.declare_parameter("umb_channels", [113]) #[620, 625, 700, 780, 820, 825])
+        self.declare_parameter("device", "/dev/ttyUSB2")
         self.declare_parameter("baudrate", 19200)
+        self.declare_parameter("device_id", 6)
 
         self.publish_frequency_ = self.get_parameter("publish_frequency").value
         self.umb_channels_ = self.get_parameter("umb_channels").value
         self.device_ = self.get_parameter("device").value
         self.baudrate_ = self.get_parameter("baudrate").value
+        self.device_id_ = self.get_parameter("device_id").value
 
         self.measurement_publisher_ = self.create_publisher(
             LufftWSXXX, "wsxxx_measurements", 10 
@@ -45,10 +47,10 @@ class WSXXXNode(Node):
     def publish_measurement(self):
 
         # TODO: Change to WS_UMB lib
-        # with WS_UMB(device=self.device_, baudrate=self.baudrate_) as umb: 
-        #     values, statuses = umb.onlineDataQueryMulti(self.umb_channels_) # TODO: check if  onlineDataQueryMultiOneCall makes a difference
+        with WS_UMB(device=self.device_, baudrate=self.baudrate_) as umb: 
+            values, statuses = umb.onlineDataQueryMulti(self.umb_channels_, self.device_id_) # TODO: check if  onlineDataQueryMultiOneCall makes a difference
         #! Dummy values:
-        values, statuses = ([1., 2., 3, 4, 5., 6.], [0, 0, 0, 0, 1, 0])
+        # values, statuses = ([1., 2., 3, 4, 5., 6.], [0, 0, 0, 0, 1, 0])
 
         self.get_logger().debug(f'{values=} {statuses}')
                     
@@ -62,12 +64,12 @@ class WSXXXNode(Node):
             if status != 0:
                 self.get_logger().info(f'None 0 status return from {CHANNELS[channel]}(channel: {channel}):')
                 # TODO: Change to WS_UMB lib
-                # self.get_logger().info(umb.checkStatus(status))
+                self.get_logger().info(umb.checkStatus(status))
                 valid = False
             else:
                 valid = True
 
-            rsetattr(msg, f'{CHANNELS[channel]}_valid', valid)
+            rsetattr(msg, f'{CHANNELS[channel]}_valid', valid)  # Check if channel is defined in device config at beginning
             rsetattr(msg, CHANNELS[channel], value)
 
         self.measurement_publisher_.publish(msg)
