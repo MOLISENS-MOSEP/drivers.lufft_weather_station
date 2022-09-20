@@ -6,7 +6,7 @@ import functools
 
 from lufft_wsx_interfaces.msg import LufftWSXXX
 from .WS_UMB import WS_UMB
-from .sensor_config import CHANNELS
+from .sensor_config import CHANNELS_LUT
 
 
 # Multilevel setattr and getattr functions
@@ -21,11 +21,13 @@ def rgetattr(obj, attr, *args):
 
 
 class WSXXXNode(Node):
-    def __init__(self):
+    def __init__(self, channels_lut: dict):
         super().__init__("wsxxx")
 
+        self.channels_lut = channels_lut
+
         self.declare_parameter("publish_frequency", 1.0)
-        self.declare_parameter("umb_channels", [113]) #[620, 625, 700, 780, 820, 825])
+        self.declare_parameter("umb_channels", list(self.channels_lut.keys())) #[620, 625, 700, 780, 820, 825])
         self.declare_parameter("device", "/dev/ttyUSB2")
         self.declare_parameter("baudrate", 19200)
         self.declare_parameter("device_id", 6)
@@ -36,6 +38,9 @@ class WSXXXNode(Node):
         self.baudrate_ = self.get_parameter("baudrate").value
         self.device_id_ = self.get_parameter("device_id").value
 
+        # Check if umb_channels are declared
+        self.check_channel_config()
+
         self.measurement_publisher_ = self.create_publisher(
             LufftWSXXX, "wsxxx_measurements", 10 
         )  # 10 is que size, like a buffer. If massages are late up to 10 msg will be kept.
@@ -44,9 +49,15 @@ class WSXXXNode(Node):
         self.get_logger().info(f"WSXXX Node started with UMB channels: {self.umb_channels_} at {self.device_}({self.baudrate_}).")
 
 
+    def check_channel_config(self):
+        for c in self.umb_channels_:
+            if c not in self.channels_lut:
+                raise ValueError(f"Undefined UMB channel [{c}]. Check if channel is listed in sensor_config.py")
+
+
     def publish_measurement(self):
 
-        # TODO: Change to WS_UMB lib
+        
         with WS_UMB(device=self.device_, baudrate=self.baudrate_) as umb: 
             values, statuses = umb.onlineDataQueryMulti(self.umb_channels_, self.device_id_) # TODO: check if  onlineDataQueryMultiOneCall makes a difference
         #! Dummy values:
@@ -62,15 +73,13 @@ class WSXXXNode(Node):
         # Set value fields of message
         for channel, value, status,  in zip(self.umb_channels_, values, statuses):
             if status != 0:
-                self.get_logger().info(f'None 0 status return from {CHANNELS[channel]}(channel: {channel}):')
-                # TODO: Change to WS_UMB lib
+                self.get_logger().info(f'None 0 status return from {self.channels_lut[channel]}({channel=}, {value=}):')
+                
                 self.get_logger().info(umb.checkStatus(status))
-                valid = False
+                rsetattr(msg, f'{self.channels_lut[channel]}_valid', False)
             else:
-                valid = True
-
-            rsetattr(msg, f'{CHANNELS[channel]}_valid', valid)  # Check if channel is defined in device config at beginning
-            rsetattr(msg, CHANNELS[channel], value)
+                rsetattr(msg, f'{self.channels_lut[channel]}_valid', True)
+                rsetattr(msg, self.channels_lut[channel], value)
 
         self.measurement_publisher_.publish(msg)
 
@@ -78,7 +87,7 @@ class WSXXXNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = WSXXXNode()
+    node = WSXXXNode(CHANNELS_LUT)
     rclpy.spin(node)
     rclpy.shutdown()
 
