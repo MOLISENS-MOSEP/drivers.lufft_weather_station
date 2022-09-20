@@ -28,7 +28,7 @@ class WSXXXNode(Node):
 
         self.declare_parameter("publish_frequency", 1.0)
         self.declare_parameter("umb_channels", list(self.channels_lut.keys())) #[620, 625, 700, 780, 820, 825])
-        self.declare_parameter("device", "/dev/ttyUSB2")
+        self.declare_parameter("device", "/dev/rs485_adapter_2")
         self.declare_parameter("baudrate", 19200)
         self.declare_parameter("device_id", 6)
 
