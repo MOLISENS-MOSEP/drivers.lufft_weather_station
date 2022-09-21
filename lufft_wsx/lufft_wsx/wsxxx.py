@@ -59,9 +59,8 @@ class WSXXXNode(Node):
 
         
         with WS_UMB(device=self.device_, baudrate=self.baudrate_) as umb: 
-            values, statuses = umb.onlineDataQueryMulti(self.umb_channels_, self.device_id_) # TODO: check if  onlineDataQueryMultiOneCall makes a difference
-        #! Dummy values:
-        # values, statuses = ([1., 2., 3, 4, 5., 6.], [0, 0, 0, 0, 1, 0])
+            # onlineDataQueryMultiOneCall seems to be faster than onlineDataQueryMulti.
+            values, statuses = umb.onlineDataQueryMultiOneCall(self.umb_channels_, self.device_id_)
 
         self.get_logger().debug(f'{values=} {statuses}')
                     
@@ -73,10 +72,15 @@ class WSXXXNode(Node):
         # Set value fields of message
         for channel, value, status,  in zip(self.umb_channels_, values, statuses):
             if status != 0:
-                self.get_logger().info(f'None 0 status return from {self.channels_lut[channel]}({channel=}, {value=}):')
-                
-                self.get_logger().info(umb.checkStatus(status))
                 rsetattr(msg, f'{self.channels_lut[channel]}_valid', False)
+                
+                # If status other than 36 log the errror. Status 36 means invalid channel: Channel not existing for this 
+                # sensor.
+                if status != 36:
+                    self.get_logger().info(
+                        f'None 0 status return from {self.channels_lut[channel]}({channel=}, {value=}, {status=}):'
+                    )
+                    self.get_logger().info(umb.checkStatus(status))
             else:
                 rsetattr(msg, f'{self.channels_lut[channel]}_valid', True)
                 rsetattr(msg, self.channels_lut[channel], value)

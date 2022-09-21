@@ -30,6 +30,7 @@ def main():
     with WS_UMB(device='/dev/rs485_adapter_2', baudrate=19200) as umb:
         #query_one_channel(umb, single_request, receiver_id=6)
         query_multiple_channels(umb, [100, 114], receiver_id=6)
+        # print(umb.send_request(6, 45, 16, int(21).to_bytes(2,'little')))
         # query_multiple_channels_one_call(umb, channels)
 
 if __name__ == "__main__":
