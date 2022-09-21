@@ -9,7 +9,7 @@ def generate_launch_description():
 
     param_path = (
         Path(get_package_share_directory('lufft_wsx_launch'), 
-        'param', 'xsens_mti_node.yaml')
+        'param', 'lufft_wsx.yaml')
     )
         
 
