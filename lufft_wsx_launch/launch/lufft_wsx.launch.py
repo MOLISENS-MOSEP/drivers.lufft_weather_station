@@ -33,7 +33,7 @@ def generate_launch_description():
         parameters=[param_path]
     )
 
-    ld.add_action(lufft_ws600_node)
-    # ld.add_action(lufft_ws100_node)
+    # ld.add_action(lufft_ws600_node)
+    ld.add_action(lufft_ws100_node)
 
     return ld

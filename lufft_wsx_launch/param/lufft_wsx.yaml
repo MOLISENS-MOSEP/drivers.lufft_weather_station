@@ -2,9 +2,9 @@ lufft_ws100:
    ros__parameters:
       publish_frequency: 1.0
       umb_channels: [620, 625, 820, 825]
-      device: "/dev/rs485_adapter_1"
+      device: "/dev/rs485_adapter_2"
       baudrate: 19200
-      device_id: 6
+      device_id: 1
 
 
 lufft_ws600:
