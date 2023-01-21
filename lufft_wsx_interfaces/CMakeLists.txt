@@ -15,7 +15,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Precipitation.msg"
   "msg/Temperature.msg"
   "msg/Humidity.msg"
-  "msg/Entalpy.msg"
+  "msg/Enthalpy.msg"
   "msg/AirPressure.msg"
   "msg/AirDensity.msg"
   "msg/Wind.msg"
