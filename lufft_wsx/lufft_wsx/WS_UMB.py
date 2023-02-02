@@ -114,45 +114,48 @@ class WS_UMB:
     def calc_next_crc_byte(self, crc_buff, nextbyte):
         for i in range (8):
             if( (crc_buff & 0x0001) ^ (nextbyte & 0x01) ):
-                x16 = 0x8408;
+                x16 = 0x8408
             else:
-                x16 = 0x0000;
-            crc_buff = crc_buff >> 1;
-            crc_buff ^= x16;
-            nextbyte = nextbyte >> 1;
-        return(crc_buff);
+                x16 = 0x0000
+            crc_buff = crc_buff >> 1
+            crc_buff ^= x16
+            nextbyte = nextbyte >> 1
+        return(crc_buff)
     
     def calc_crc16(self, data):
-        crc = 0xFFFF;
+        crc = 0xFFFF
         for byte in data:
-            crc = self.calc_next_crc_byte(crc, byte);
+            crc = self.calc_next_crc_byte(crc, byte)
         return crc
 
     def send_request_one_call_multi(self, receiver_id, command, command_version, channels):
+
+        if len(channels) > 20:
+            raise ValueError("Too many channels for one call. Message too long.")
         
-        SOH, STX, ETX, EOT= b'\x01', b'\x02', b'\x03', b'\x04'
+        SOH, STX, ETX, EOT = b'\x01', b'\x02', b'\x03', b'\x04'
         VERSION = b'\x10'
 
-        TO = int(receiver_id).to_bytes(1,'little')
+        TO = int(receiver_id).to_bytes(1, 'little')
         TO_CLASS = b'\x70'
-        FROM = int(1).to_bytes(1,'little')
+        FROM = int(1).to_bytes(1, 'little')
         FROM_CLASS = b'\xF0'
         
         LEN = 3
         channel_len = len(channels)
-        NUMBER = int(channel_len).to_bytes(1,'little')
+        NUMBER = int(channel_len).to_bytes(1, 'little')
 
         FULLPAYLOAD = NUMBER
         for channel in channels:
-            as_byte = int(channel).to_bytes(2,'little')
+            as_byte = int(channel).to_bytes(2, 'little')
             FULLPAYLOAD += as_byte
             for byte in as_byte:
                 LEN += 1
 
-        LEN = int(LEN).to_bytes(1,'little')
+        LEN = int(LEN).to_bytes(1, 'little')
         
-        COMMAND = int(command).to_bytes(1,'little')
-        COMMAND_VERSION = int(command_version).to_bytes(1,'little')
+        COMMAND = int(command).to_bytes(1, 'little')
+        COMMAND_VERSION = int(command_version).to_bytes(1, 'little')
 
         # Assemble transmit-frame
         tx_frame = SOH + VERSION + TO + TO_CLASS + FROM + FROM_CLASS + LEN + STX + COMMAND + COMMAND_VERSION + FULLPAYLOAD + ETX
@@ -162,14 +165,14 @@ class WS_UMB:
 
         # Write transmit-frame to serial
         self.serial.write(tx_frame)
-        #print([hex(c) for c in tx_frame])
+        # print([hex(c) for c in tx_frame])
         
         ### < --- --- > ###
         
         # Read frame from serial
         rx_frame = self.readFromSerial()
-        #print("one call response: " + str(rx_frame))
-        #print([hex(c) for c in rx_frame])
+        # print("one call response: " + str(rx_frame))
+        # print([hex(c) for c in rx_frame])
         
         # compare checksum field to calculated checksum
         cs_calculated = self.calc_crc16(rx_frame[:-3]).to_bytes(2, 'little')
@@ -204,12 +207,12 @@ class WS_UMB:
         parse_index = 17
 
         for i in range(len(channels)):
-            #status = int.from_bytes(rx_frame[10:11], byteorder='little')
+            # status = int.from_bytes(rx_frame[10:11], byteorder='little')
             status = int.from_bytes(rx_frame[index - 3: (index + 1) - 3], byteorder='little')
             type_of_value = int.from_bytes(rx_frame[index:index + 1], byteorder='little')
             sub_len = int.from_bytes(rx_frame[index - 4: (index + 1) - 4], byteorder='little')
-            #print(sub_len)
-            #print(status)
+            # print(sub_len)
+            # print(status)
 
             index += sub_len + 1
             
@@ -239,20 +242,20 @@ class WS_UMB:
     
     def send_request(self, receiver_id, command, command_version, payload):
         
-        SOH, STX, ETX, EOT= b'\x01', b'\x02', b'\x03', b'\x04'
+        SOH, STX, ETX, EOT = b'\x01', b'\x02', b'\x03', b'\x04'
         VERSION = b'\x10'
-        TO = int(receiver_id).to_bytes(1,'little')
+        TO = int(receiver_id).to_bytes(1, 'little')
         TO_CLASS = b'\x70'
-        FROM = int(1).to_bytes(1,'little')
+        FROM = int(1).to_bytes(1, 'little')
         FROM_CLASS = b'\xF0'
         
         LEN = 2
         for payload_byte in payload:
             LEN += 1
-        LEN = int(LEN).to_bytes(1,'little')
+        LEN = int(LEN).to_bytes(1, 'little')
         
-        COMMAND = int(command).to_bytes(1,'little')
-        COMMAND_VERSION = int(command_version).to_bytes(1,'little')
+        COMMAND = int(command).to_bytes(1, 'little')
+        COMMAND_VERSION = int(command_version).to_bytes(1, 'little')
         
         # Assemble transmit-frame
         tx_frame = SOH + VERSION + TO + TO_CLASS + FROM + FROM_CLASS + LEN + STX + COMMAND + COMMAND_VERSION + payload + ETX
@@ -261,14 +264,14 @@ class WS_UMB:
         
         # Write transmit-frame to serial
         self.serial.write(tx_frame)
-        #print([hex(c) for c in tx_frame])
+        # print([hex(c) for c in tx_frame])
         
         ### < --- --- > ###
         
         # Read frame from serial
         rx_frame = self.readFromSerial()
-        #print("single channel response: " + str(rx_frame))
-        #print([hex(c) for c in rx_frame])
+        # print("single channel response: " + str(rx_frame))
+        # print([hex(c) for c in rx_frame])
         
         # compare checksum field to calculated checksum
         cs_calculated = self.calc_crc16(rx_frame[:-3]).to_bytes(2, 'little')
@@ -300,8 +303,8 @@ class WS_UMB:
         status = int.from_bytes(rx_frame[10:11], byteorder='little')
         type_of_value = int.from_bytes(rx_frame[13:14], byteorder='little')     
         value = 0
-        #print("work: type_of_value: " + str(type_of_value))
-        #print("work: status: " + str(status))
+        # print("work: type_of_value: " + str(type_of_value))
+        # print("work: status: " + str(status))
         
         if type_of_value == 16:     # UNSIGNED_CHAR
             value = struct.unpack('<B', rx_frame[14:15])[0]
