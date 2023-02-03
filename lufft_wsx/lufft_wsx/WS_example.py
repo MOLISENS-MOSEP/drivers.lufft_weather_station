@@ -44,28 +44,29 @@ def process_many_channels(umb, channels, receiver_id=1):
         values.extend(values_junks)
         statues.extend(statuses_junks)
 
-    print(values)
-    print(statues)
+    print(f'{values=}')
+    print(f'{statues=}')
 
 
 def main():
 
     single_request = 113                        # single channel request
     channels = [
-        100, 120, 140, 160,
-        112, 113,
-        200, 220, 240, 260,
-        215,
-        300, 320, 340, 360,
-        305, 325, 345, 365,
-        310,
-        400, 420, 440, 460, 480,
-        401,
-        403,
-        500, 520, 540, 580,
-        501,
-        805,
-        806
+        # 100, 120, 140, 160,
+        # 112, 113,
+        # 200, 220, 240, 260,
+        # 215,
+        # 300, 320, 340, 360,
+        # 305, 325, 345, 365,
+        # 310,
+        # 400, 420, 440, 460, 480,
+        # 401,
+        # 403,
+        # 500, 520, 540, 580,
+        # 501,
+        # 805,
+        # 806,
+        10000
     ]  # channels to request
 
     with WS_UMB(device='/dev/rs485_adapter_1', baudrate=19200) as umb:
