@@ -79,7 +79,13 @@ CHANNELS_LUT = {
     700: "precipitation.type",
     780: "precipitation.code",
     820: "precipitation.intensity_hour",
-    825: "precipitation.intensity_minute"
+    825: "precipitation.intensity_minute",
+    
+    
+    900: "radiation.current",
+    920: "radiation.minimum",
+    940: "radiation.maximum",
+    960: "radiation.average",
 
 }
 

@@ -8,3 +8,4 @@ AirPressure pressure
 AirDensity density
 Wind wind
 Precipitation precipitation
+Radiation radiation
