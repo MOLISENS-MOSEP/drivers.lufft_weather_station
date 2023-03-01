@@ -19,6 +19,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/AirPressure.msg"
   "msg/AirDensity.msg"
   "msg/Wind.msg"
+  "msg/Radiation.msg"
 
   DEPENDENCIES std_msgs
 )
