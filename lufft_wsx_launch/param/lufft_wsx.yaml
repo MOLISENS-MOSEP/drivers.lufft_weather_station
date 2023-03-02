@@ -1,16 +1,18 @@
 lufft_ws100:
    ros__parameters:
-      publish_frequency: 1.0
-      umb_channels: [620, 625, 820, 825]
-      device: "/dev/rs485_adapter_0"
-      baudrate: 19200
-      device_id: 1
+      query_interval: 1.0                 # Defines the interval between two queries to the sensor in seconds. Messages will be published at the same interval.
+      umb_channels: [                     # List of the UMB channels to querry. See: https://www.lufft.com/download/manual-lufft-wsxxx-weather-sensor-en/
+         620, 625, 820, 825
+      ]
+      device: "/dev/rs485_adapter_0"      # The port where the sensor is connected
+      baudrate: 19200                     # Baudrate of that port
+      device_id: 1                        # The device ID of the sensor as configured in the Lufft software.
 
 
 lufft_ws600:
    ros__parameters:
-      publish_frequency: 1.0
-      umb_channels: [
+      query_interval: 1.0               # Defines the interval between two queries to the sensor in seconds. Messages will be published at the same interval.
+      umb_channels: [                     # List of the UMB channels to querry. See: https://www.lufft.com/download/manual-lufft-wsxxx-weather-sensor-en/
          100, 120, 140, 160,
          112, 113,
          200, 220, 240, 260,
@@ -26,7 +28,7 @@ lufft_ws600:
          805,
          806
       ]
-      device: "/dev/rs485_adapter_1"
-      baudrate: 19200
-      device_id: 6
+      device: "/dev/rs485_adapter_1"     # The port where the sensor is connected
+      baudrate: 19200                     # Baudrate of that port
+      device_id: 6                        # The device ID of the sensor as configured in the Lufft software.
       

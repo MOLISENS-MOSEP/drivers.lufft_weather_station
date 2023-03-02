@@ -44,7 +44,7 @@ class WSXXXNode(Node):
         
         self.channels_lut = channels_lut
 
-        self.declare_parameter("publish_interval", 60.0)
+        self.declare_parameter("query_interval", 60.0)
         self.declare_parameter(
             "umb_channels", list(self.channels_lut.keys())
         )  # [620, 625, 700, 780, 820, 825])
@@ -52,7 +52,7 @@ class WSXXXNode(Node):
         self.declare_parameter("baudrate", 19200)
         self.declare_parameter("device_id", 6)
 
-        self.publish_interval_ = self.get_parameter("publish_interval").value
+        self.query_interval_ = self.get_parameter("query_interval").value
         self.umb_channels_ = self.get_parameter("umb_channels").value
         self.device_ = self.get_parameter("device").value
         self.baudrate_ = self.get_parameter("baudrate").value
@@ -64,7 +64,7 @@ class WSXXXNode(Node):
         self.measurement_publisher_ = self.create_publisher(
             LufftWSXXX, "wsxxx_measurements", 10
         )  # 10 is que size, like a buffer. If massages are late up to 10 msg will be kept.
-        self.create_timer(self.publish_interval_, self.publish_measurement)
+        self.create_timer(self.query_interval_, self.publish_measurement)
 
         self.get_logger().info(
             f"WSXXX Node started with UMB channels: {self.umb_channels_} at {self.device_}({self.baudrate_})."
