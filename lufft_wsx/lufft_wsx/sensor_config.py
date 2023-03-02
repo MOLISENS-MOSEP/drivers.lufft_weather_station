@@ -59,7 +59,7 @@ CHANNELS_LUT = {
     480: "wind.speed_vector_avg",
 
     401: "wind.speed_fast",
-
+    
     403: "wind.speed_std",
 
     500: "wind.direction",
@@ -81,12 +81,29 @@ CHANNELS_LUT = {
     820: "precipitation.intensity_hour",
     825: "precipitation.intensity_minute",
     
+    4600: "precipitation.total_precipitation_particles",
+    4601: "precipitation.total_drops",
+    4602: "precipitation.drizzle_particles",
+    4603: "precipitation.snow_particles",
+    4604: "precipitation.hail_particles",
+    4620: "precipitation.rain_class_0",
+    4621: "precipitation.rain_class_1",
+    4622: "precipitation.rain_class_2",
+    4623: "precipitation.rain_class_3",
+    4624: "precipitation.rain_class_4",
+    4625: "precipitation.rain_class_5",
+    4626: "precipitation.rain_class_6",
+    4627: "precipitation.rain_class_7",
+    4628: "precipitation.rain_class_8",
+    4629: "precipitation.rain_class_9",
+    4630: "precipitation.rain_class_10",
+    4631: "precipitation.rain_class_11",
+    
     
     900: "radiation.current",
     920: "radiation.minimum",
     940: "radiation.maximum",
-    960: "radiation.average",
-
+    960: "radiation.average"
 }
 
 
