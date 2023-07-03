@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from collections.abc import Iterator
 import rclpy
 from rclpy.node import Node
 
@@ -22,7 +23,7 @@ def rgetattr(obj, attr, *args):
     return functools.reduce(_getattr, [obj] + attr.split("."))
 
 
-def divide_chunks(lst: list, n: int) -> list:
+def divide_chunks(lst: list, n: int) -> Iterator[list]:
     """Yield successive n-sized chunks from l.
 
     Args:
