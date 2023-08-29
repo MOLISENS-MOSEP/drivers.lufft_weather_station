@@ -6,7 +6,7 @@ from rclpy.node import Node
 import functools
 
 from lufft_wsx_interfaces.msg import LufftWSXXX
-from .WS_UMB import WS_UMB
+from .WS_UMB import WS_UMB, UMBError
 from .sensor_config import CHANNELS_LUT
 
 
@@ -79,7 +79,6 @@ class WSXXXNode(Node):
                 )
 
 
-
     def publish_measurement(self):
 
         with WS_UMB(device=self.device_, baudrate=self.baudrate_) as umb:
@@ -90,7 +89,12 @@ class WSXXXNode(Node):
             values = []
             statuses = []
             for channels in divide_chunks(self.umb_channels_, self.max_number_channels_per_call):
-                values_junks, statuses_junks = umb.onlineDataQueryMultiOneCall(channels, receiver_id=self.device_id_)
+                try:
+                    values_junks, statuses_junks = umb.onlineDataQueryMultiOneCall(channels, receiver_id=self.device_id_)
+                except UMBError as ex:
+                    # Skip this chunk and continue with next chunk
+                    self.get_logger().error(f"UMBError: {ex}")
+                    continue
                 values.extend(values_junks)
                 statuses.extend(statuses_junks)
             
