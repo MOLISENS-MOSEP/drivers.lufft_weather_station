@@ -8,28 +8,16 @@ from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
     ld = LaunchDescription()
 
-    param_path = Path(
-        get_package_share_directory("lufft_wsx_launch"), "param", "lufft_wsx.yaml"
-    )
+    param_path = Path(get_package_share_directory("lufft_wsx_launch"), "param", "lufft_wsx.yaml")
 
-    lufft_ws100_node = Node(
+    lufft_ws_node = Node(
         package="lufft_wsx",
         executable="wsxxx",
-        name="lufft_ws100",
-        remappings=[("wsxxx_measurements", "ws100_measurements")],
-        parameters=[param_path],
-    )
-
-    lufft_ws600_node = Node(
-        package="lufft_wsx",
-        executable="wsxxx",
-        name="lufft_ws600",
-        remappings=[("wsxxx_measurements", "ws600_measurements")],
+        name="lufft_ws",
         parameters=[param_path],
         # arguments=["--ros-args", "--log-level", LaunchConfiguration("log_level")],
     )
 
-    ld.add_action(lufft_ws600_node)
-    # ld.add_action(lufft_ws100_node)
+    ld.add_action(lufft_ws_node)
 
     return ld

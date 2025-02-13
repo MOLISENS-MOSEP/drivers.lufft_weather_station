@@ -1,0 +1,73 @@
+/aws/lufft_ws100:
+  ros__parameters:
+    query_interval: 1.0             # Defines the interval between two queries to the sensor in seconds. Messages will be published at the same interval.
+    umb_channels: [                 # List of the UMB channels to querry. See: https://www.lufft.com/download/manual-lufft-wsxxx-weather-sensor-en/
+      113,                              # Heating Temperature, sampling rate 1 min
+      620, 625,                         # Precipitation Quantity, sampling rate event dependent - response threshold 0.01mm (Radar)
+      700,                              # Precipitation type, sampling rate event dependent -response threshold 0.002mm (Radar)
+      780,                              # WMO Code, sampling rate 1 min (10min floating average)
+      820, 825,                         # Precipitation Intensity, sampling rate 1 min
+      4600, 4601,                       # Drop Diameter Distribution, sampling rate event dependent
+      4602, 4603, 4604, 4620, 4621,     # Drop Diameter Distribution, sampling rate event dependent
+      4622, 4623, 4624, 4625, 4626,
+      4627, 4628, 4629, 4630, 4631
+    ]
+    device: "/dev/rs485_adapter_0"  # The port where the sensor is connected
+    baudrate: 19200                 # Baudrate of that port
+    device_id: 1                    # The device ID of the sensor as configured in the Lufft software.
+
+
+/aws/lufft_ws501:
+  ros__parameters:
+    query_interval: 1.0             # Defines the interval between two queries to the sensor in seconds. Messages will be published at the same interval.
+    umb_channels: [                 # List of the UMB channels to querry. See: https://www.lufft.com/download/manual-lufft-wsxxx-weather-sensor-en/
+      100, 120, 140, 160,               # Air Temperature, sampling rate 1 min
+      112, 113,                         # Heating Temperature, sampling rate 1 min
+      200, 220, 240, 260,               # Humidity, sampling rate 1 min
+      215,                              # Specific Enthalpy, sampling rate 1 min
+      300, 320, 340, 360,               # Pressure absulute, sampling rate 1 min
+      305, 325, 345, 365,               # Pressure relative, sampling rate 1 min
+      310,                              # Density, sampling rate 1 min
+      420, 440, 460,                    # Wind Speed (avg, max, min), sampling rate 1-10 min (defined in the config of the sensor)
+      520, 540,                         # Wind Direction(avg, max, min), sampling rate min 1-10 min (defined in the config of the sensor)
+      400, 480,                         # Wind Speed, sampling rate 10 sec
+      403,                              # Wind Speed Standard Deviation, sampling rate 10 sec
+      500, 580,                         # Wind Direction, sampling rate 10 sec
+      805,                              # Wind Measurement Quality, sampling rate 10 sec
+      401,                              # Wind Speed fast, sampling rate 1 sec
+      501,                              # Wind Direction fast, sampling rate 1 sec
+      806,                              # Wind Measurement Quality fast, sampling rate 1 sec
+      900, 920, 940, 960                # Radiation, sampling rate 10 sec
+    ]
+    device: "/dev/rs485_adapter_1"  # The port where the sensor is connected
+    baudrate: 19200                 # Baudrate of that port
+    device_id: 2                    # The device ID of the sensor as configured in the Lufft software.
+
+
+/aws/lufft_ws600:
+  ros__parameters:
+    query_interval: 1.0             # Defines the interval between two queries to the sensor in seconds. Messages will be published at the same interval.
+    umb_channels: [                 # List of the UMB channels to querry. See: https://www.lufft.com/download/manual-lufft-wsxxx-weather-sensor-en/
+      100, 120, 140, 160,               # Air Temperature, sampling rate 1 min
+      112, 113,                         # Heating Temperature, sampling rate 1 min
+      200, 220, 240, 260,               # Humidity, sampling rate 1 min
+      215,                              # Specific Enthalpy, sampling rate 1 min
+      300, 320, 340, 360,               # Pressure absulute, sampling rate 1 min
+      305, 325, 345, 365,               # Pressure relative, sampling rate 1 min
+      310,                              # Density, sampling rate 1 min
+      420, 440, 460,                    # Wind Speed (avg, max, min), sampling rate 1-10 min (defined in the config of the sensor)
+      520, 540,                         # Wind Direction(avg, max, min), sampling rate min 1-10 min (defined in the config of the sensor)
+      400, 480,                         # Wind Speed, sampling rate 10 sec
+      403,                              # Wind Speed Standard Deviation, sampling rate 10 sec
+      500, 580,                         # Wind Direction, sampling rate 10 sec
+      805,                              # Wind Measurement Quality, sampling rate 10 sec
+      401,                              # Wind Speed fast, sampling rate 1 sec
+      501,                              # Wind Direction fast, sampling rate 1 sec
+      806,                              # Wind Measurement Quality fast, sampling rate 1 sec
+      620, 625,                         # Precipitation Quantity, sampling rate event dependent - response threshold 0.01mm (Radar)
+      700,                              # Precipitation type, sampling rate event dependent -response threshold 0.002mm (Radar)
+      820,                              # Precipitation Intensity, sampling rate 1 min
+    ]
+    device: "/dev/rs485_adapter_2"  # The port where the sensor is connected
+    baudrate: 19200                 # Baudrate of that port
+    device_id: 6                    # The device ID of the sensor as configured in the Lufft software.
