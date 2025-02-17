@@ -4,11 +4,11 @@
 ## Description
 <!-- Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors. -->
 
-This is a [ROS 2](https://www.github.com/ros2) driver for Lufft UMB weather sensors. The core code was forked from XX and credits for all the heavy lifting regarding the binary protocol translation goes to him/her!
+This is a [ROS 2](https://www.github.com/ros2) driver for communicating with Lufft UMB weather sensors via serial port.
 
 ## Requirements
 
-The tested ROS distribution is Humble, but it should work with other ROS 2 distributions as well. Any Lufft sensor that supports UMB should work. If a weather parameter is missing it can be added in [LufftWSXXX.msg](/lufft_wsx_interfaces/msg/LufftWSXXX.msg).
+The tested ROS distribution is Humble, but it should work with other ROS 2 distributions as well. Any Lufft sensor that supports UMB should work. For connection a RS482 to USB adapter was used. If a weather parameter is missing it can be added in [LufftWSXXX.msg](/lufft_wsx_interfaces/msg/LufftWSXXX.msg).
 
 The driver was successfully tested with the following devices:
 
@@ -56,4 +56,5 @@ The driver is configured via a YAML file. The default configuration file is `con
 Always open for PRs :)
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+
+This project is based on the work of [Pascal Deneaux](https://github.com/Tasm-Devil/lufft-python) who did the heavy lifting regarding the binary protocol translation and [Aleksi Narkilahti](https://github.com/AleksiNarkilahti/lufft-python) who added multichannel queries and an English translation.

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Gaisberger
+    given-names: Christoph
+    orcid: https://orcid.org/0000-0001-5295-3338
+title: "ROS 2 driver for Luff-UMB Weather Sensor"
+version: 1.0
+date-released: 2025-02-14
